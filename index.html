@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Generator</title>
+  </head>
+  <body>
+    <main>
+      <form id="userInputForm">
+        <div class="lineWrap">
+          <label>Use capital letters?</label>
+          <input
+            class="chkBox"
+            type="checkbox"
+            id="capitalLetters"
+            value="yes"
+          />
+        </div>
+        <div class="lineWrap">
+          <label>Use numbers?</label>
+          <input class="chkBox" type="checkbox" id="useNumbers" value="yes" />
+        </div>
+        <div class="lineWrap">
+          <label>Use special characters?</label>
+          <input class="chkBox" type="checkbox" id="useSpecChar" value="yes" />
+        </div>
+        <div class="lineWrap">
+          <label>Password length</label>
+          <input type="range" min="8" max="32" class="slider" id="passLength" />
+          <div class="sliderOutput"></div>
+        </div>
+        <button type="submit">GENERATE</button>
+      </form>
+      <div class="content"></div>
+      <div class="passTable"></div>
+    </main>
+
+    <script src="index.js"></script>
+  </body>
+</html>

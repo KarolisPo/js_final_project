@@ -1,0 +1,28 @@
+#userInputForm {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+#saveForm {
+  display: flex;
+  flex-direction: column;
+}
+
+#saveForm input,
+#saveForm button {
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+.lineWrap {
+  display: flex;
+}
+
+.content {
+  text-align: center;
+  padding-top: 30px;
+  max-width: 420px;
+  margin: 0 auto;
+}
