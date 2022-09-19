@@ -52,35 +52,37 @@ userForm.addEventListener("submit", (e) => {
   sliderOutput.textContent = slider.value;
 
   function savePass() {
-    const passWraper = document.createElement("div");
+    const passWraper = createMyElement("div", {
+      textContent: password.join(""),
+    });
+    console.log(passWraper);
     const saveBtn = document.createElement("button");
 
     saveBtn.textContent = "SAVE";
-    passWraper.textContent = password.join("");
     content.append(passWraper, saveBtn);
 
     saveBtn.addEventListener("click", () => {
       e.target.reset();
       content.innerHTML = null;
-      const saveForm = document.createElement("form");
-      const passLabel = document.createElement("label");
-      const passWrap = document.createElement("div");
-      const pageInput = document.createElement("input");
-      const userNameInput = document.createElement("input");
-      const pageLabel = document.createElement("label");
-      const userNameLabel = document.createElement("label");
-      const saveBtn = document.createElement("button");
-
-      passLabel.textContent = "GENERATED PASSWORD";
-      passWrap.textContent = password.join("");
-      pageLabel.textContent = "Insert page url";
-      userNameLabel.textContent = "Insert user name";
-      saveBtn.textContent = "SAVE";
-
-      saveForm.setAttribute("id", "saveForm");
-      userNameInput.setAttribute("name", "userName");
-      pageInput.setAttribute("name", "webUrl");
-      saveBtn.setAttribute("type", "submit");
+      const saveForm = createMyElement("form", { id: "saveForm" });
+      const passLabel = createMyElement("label", {
+        textContent: "GENERATED PASSWORD",
+      });
+      const passWrap = createMyElement("div", {
+        textContent: password.join(""),
+      });
+      const pageInput = createMyElement("input", { name: "webUrl" });
+      const userNameInput = createMyElement("input", { name: "userName" });
+      const pageLabel = createMyElement("label", {
+        textContent: "Insert page URL",
+      });
+      const userNameLabel = createMyElement("label", {
+        textContent: "Insert User name",
+      });
+      const saveBtn = createMyElement("button", {
+        textContent: "SAVE",
+        type: "submit",
+      });
 
       saveForm.append(
         passLabel,
@@ -115,12 +117,11 @@ userForm.addEventListener("submit", (e) => {
 function renderContacts(objArray) {
   const contentDiv = document.querySelector(".passTable");
   contentDiv.innerHTML = null;
-  
+
   objArray.forEach((singleObj, index) => {
     let currentPassword = "";
 
-    const lineWrap = document.createElement("div");
-    lineWrap.classList.add("line");
+    const lineWrap = createMyElement("div", { classList: "line" });
 
     Object.entries(singleObj).forEach((valueArr) => {
       const infoBlock = document.createElement("div");
@@ -135,23 +136,26 @@ function renderContacts(objArray) {
     });
 
     const btnWrap = document.createElement("div");
-    const showPassBtn = document.createElement("button");
-    showPassBtn.textContent = "SHOW PASSWORD";
+    const showPassBtn = createMyElement("button", { textContent: "SHOW PASS" });
+
+    function showHide(parent, child) {
+      parent.append(child);
+      parent.firstChild.remove();
+      let passBox = "";
+      if (child.textContent === "HIDE") {
+        passBox = currentPassword;
+      } else {
+        passBox = "•".repeat(currentPassword.length);
+      }
+      document.querySelectorAll("#password")[index].textContent = passBox;
+    }
 
     showPassBtn.addEventListener("click", () => {
-      const hideBtn = document.createElement("button");
-      hideBtn.textContent = "HIDE";
-      btnWrap.append(hideBtn);
-      btnWrap.firstChild.remove();
-      document.querySelectorAll("#password")[index].textContent =
-        currentPassword;
+      const hideBtn = createMyElement("button", { textContent: "HIDE" });
+      showHide(btnWrap, hideBtn);
 
       hideBtn.addEventListener("click", () => {
-        btnWrap.append(showPassBtn);
-        btnWrap.firstChild.remove();
-        document.querySelectorAll("#password")[index].textContent = "•".repeat(
-          currentPassword.length
-        );
+        showHide(btnWrap, showPassBtn);
       });
     });
 
@@ -159,6 +163,16 @@ function renderContacts(objArray) {
     lineWrap.append(btnWrap);
     contentDiv.append(lineWrap);
   });
+}
+
+function createMyElement(tag, attributes) {
+  const myElement = document.createElement(tag);
+
+  Object.entries(attributes).forEach((singleAttribute) => {
+    myElement[singleAttribute[0]] = singleAttribute[1];
+  });
+
+  return myElement;
 }
 
 window.addEventListener("DOMContentLoaded", (e) => {
@@ -170,5 +184,3 @@ window.addEventListener("DOMContentLoaded", (e) => {
     renderContacts(passData);
   }
 });
-
-console.log(dataList);
