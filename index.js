@@ -3,6 +3,8 @@ const slider = document.querySelector(".slider");
 const sliderOutput = document.querySelector(".sliderOutput");
 const userForm = document.querySelector("#userInputForm");
 
+let dataList = [];
+
 sliderOutput.textContent = slider.value;
 slider.oninput = function () {
   sliderOutput.innerHTML = this.value;
@@ -100,6 +102,9 @@ userForm.addEventListener("submit", (e) => {
             singleInput.value;
         });
         passObject.password = password.join("");
+        dataList.push(passObject);
+        renderContacts(dataList);
+        localStorage.setItem("pass", JSON.stringify(dataList));
       });
     });
   }
@@ -107,3 +112,63 @@ userForm.addEventListener("submit", (e) => {
   savePass();
 });
 
+function renderContacts(objArray) {
+  const contentDiv = document.querySelector(".passTable");
+  contentDiv.innerHTML = null;
+  
+  objArray.forEach((singleObj, index) => {
+    let currentPassword = "";
+
+    const lineWrap = document.createElement("div");
+    lineWrap.classList.add("line");
+
+    Object.entries(singleObj).forEach((valueArr) => {
+      const infoBlock = document.createElement("div");
+      if (valueArr[0] === "password") {
+        infoBlock.textContent = "•".repeat(valueArr[1].length);
+        infoBlock.setAttribute("id", "password");
+        currentPassword = valueArr[1];
+      } else {
+        infoBlock.textContent = valueArr[1];
+      }
+      lineWrap.append(infoBlock);
+    });
+
+    const btnWrap = document.createElement("div");
+    const showPassBtn = document.createElement("button");
+    showPassBtn.textContent = "SHOW PASSWORD";
+
+    showPassBtn.addEventListener("click", () => {
+      const hideBtn = document.createElement("button");
+      hideBtn.textContent = "HIDE";
+      btnWrap.append(hideBtn);
+      btnWrap.firstChild.remove();
+      document.querySelectorAll("#password")[index].textContent =
+        currentPassword;
+
+      hideBtn.addEventListener("click", () => {
+        btnWrap.append(showPassBtn);
+        btnWrap.firstChild.remove();
+        document.querySelectorAll("#password")[index].textContent = "•".repeat(
+          currentPassword.length
+        );
+      });
+    });
+
+    btnWrap.append(showPassBtn);
+    lineWrap.append(btnWrap);
+    contentDiv.append(lineWrap);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", (e) => {
+  if (localStorage.getItem("pass")) {
+    let passData = JSON.parse(localStorage.getItem("pass"));
+    passData.forEach((singleObj) => {
+      dataList.push(singleObj);
+    });
+    renderContacts(passData);
+  }
+});
+
+console.log(dataList);

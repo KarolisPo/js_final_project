@@ -26,3 +26,23 @@
   max-width: 420px;
   margin: 0 auto;
 }
+
+.passTable {
+  margin: 0 auto;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  gap: 10px;
+}
+
+.line {
+  display: flex;
+  gap: 10px;
+}
+
+.line div {
+  max-width: 240px;
+  flex: 1;
+  border: 1px solid red;
+}
