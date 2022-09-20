@@ -22,7 +22,7 @@ let charactersObj = {
 
 userForm.addEventListener("submit", (e) => {
   content.innerHTML = null;
-  baseChars = "abcdefghijklmnopqrstuvwxyz";
+  let baseChars = "abcdefghijklmnopqrstuvwxyz";
   e.preventDefault();
   const passLength = document.querySelector("#passLength");
 
@@ -48,21 +48,27 @@ userForm.addEventListener("submit", (e) => {
     password.push(baseChars.split("")[getRandomInt(baseChars.length)]);
   }
 
-  console.log(password.join(""));
   sliderOutput.textContent = slider.value;
 
   function savePass() {
+    let formData = {};
+    userForm.querySelectorAll("input").forEach((singleInput, index) => {
+      if (singleInput.type === "checkbox") {
+        formData[index] = singleInput.checked;
+      } else {
+        formData[index] = singleInput.value;
+      }
+      localStorage.setItem("formData", JSON.stringify(formData));
+    });
+
     const passWraper = createMyElement("div", {
       textContent: password.join(""),
     });
-    console.log(passWraper);
-    const saveBtn = document.createElement("button");
+    const saveBtn = createMyElement("button", { textContent: "Save" });
 
-    saveBtn.textContent = "SAVE";
     content.append(passWraper, saveBtn);
 
     saveBtn.addEventListener("click", () => {
-      e.target.reset();
       content.innerHTML = null;
       const saveForm = createMyElement("form", { id: "saveForm" });
       const passLabel = createMyElement("label", {
@@ -124,7 +130,7 @@ function renderContacts(objArray) {
     const lineWrap = createMyElement("div", { classList: "line" });
 
     Object.entries(singleObj).forEach((valueArr) => {
-      const infoBlock = document.createElement("div");
+      const infoBlock = createMyElement("div", {});
       if (valueArr[0] === "password") {
         infoBlock.textContent = "•".repeat(valueArr[1].length);
         infoBlock.setAttribute("id", "password");
@@ -135,7 +141,7 @@ function renderContacts(objArray) {
       lineWrap.append(infoBlock);
     });
 
-    const btnWrap = document.createElement("div");
+    const btnWrap = createMyElement("div", {});
     const showPassBtn = createMyElement("button", { textContent: "SHOW PASS" });
 
     function showHide(parent, child) {
@@ -182,5 +188,17 @@ window.addEventListener("DOMContentLoaded", (e) => {
       dataList.push(singleObj);
     });
     renderContacts(passData);
+  }
+  if (localStorage.getItem("formData")) {
+    const allInputs = userForm.querySelectorAll("input");
+    let formData = JSON.parse(localStorage.getItem("formData"));
+    Object.entries(formData).forEach((singleInput) => {
+      if (allInputs[singleInput[0]].type === "checkbox") {
+        allInputs[singleInput[0]].checked = singleInput[1];
+      } else {
+        allInputs[singleInput[0]].value = Number(singleInput[1]);
+        sliderOutput.textContent = singleInput[1];
+      }
+    });
   }
 });
