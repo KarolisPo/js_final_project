@@ -3,6 +3,28 @@ const slider = document.querySelector(".slider");
 const sliderOutput = document.querySelector(".sliderOutput");
 const userForm = document.querySelector("#userInputForm");
 
+const userNumbers = document.querySelector("#useNumbers");
+const userSpecChar = document.querySelector("#useSpecChar");
+const easySay = document.querySelector("#easySay");
+
+function checkProps() {
+  if (easySay.checked && easySay.value === "easySay") {
+    userNumbers.checked = false;
+    userNumbers.setAttribute("disabled", "");
+    userSpecChar.checked = false;
+    userSpecChar.setAttribute("disabled", "");
+  } else {
+    userNumbers.removeAttribute("disabled");
+    userSpecChar.removeAttribute("disabled");
+  }
+}
+
+checkProps();
+
+easySay.addEventListener("click", () => {
+  checkProps();
+});
+
 let dataList = [];
 
 sliderOutput.textContent = slider.value;
@@ -28,7 +50,9 @@ userForm.addEventListener("submit", (e) => {
 
   password = [];
 
-  document.querySelectorAll(".chkBox").forEach((singleCheck, index) => {
+  const allCheckBoxes = document.querySelectorAll(".chkBox");
+
+  allCheckBoxes.forEach((singleCheck, index) => {
     if (singleCheck.checked) {
       switch (index) {
         case 0:
@@ -43,6 +67,16 @@ userForm.addEventListener("submit", (e) => {
       }
     }
   });
+
+  const easyRead = document.querySelector("#easyRead");
+  if (easyRead.checked) {
+    baseChars = baseChars
+      .split("")
+      .filter((singleLetter) => {
+        return !"IO01i".includes(singleLetter);
+      })
+      .join("");
+  }
 
   for (let i = 0; i < passLength.value; i++) {
     password.push(baseChars.split("")[getRandomInt(baseChars.length)]);
@@ -113,6 +147,7 @@ userForm.addEventListener("submit", (e) => {
         dataList.push(passObject);
         renderContacts(dataList);
         localStorage.setItem("pass", JSON.stringify(dataList));
+        content.innerHTML = "";
       });
     });
   }
@@ -226,12 +261,11 @@ function renderContacts(objArray) {
         });
       });
 
-      deleteOpt.addEventListener('click', () => {
-        dataList.splice(index, 1)
+      deleteOpt.addEventListener("click", () => {
+        dataList.splice(index, 1);
         localStorage.setItem("pass", JSON.stringify(dataList));
         renderContacts(dataList);
-      })
-
+      });
     });
 
     btnWrap.append(showPassBtn);
