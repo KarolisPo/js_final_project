@@ -165,8 +165,77 @@ function renderContacts(objArray) {
       });
     });
 
+    const featuresImg = createMyElement("img", {
+      src: "images/dots_black.png",
+      class: "dots",
+    });
+
+    featuresImg.addEventListener("click", (e) => {
+      const modal = createMyElement("div", { classList: "modal" });
+      const modalContent = createMyElement("div", {
+        classList: "modalcontent",
+      });
+      const editOpt = createMyElement("div", {
+        id: "editpass",
+        textContent: "EDIT",
+      });
+      const deleteOpt = createMyElement("div", {
+        id: "deletepass",
+        textContent: "DELETE",
+      });
+      const copyOpt = createMyElement("div", {
+        id: "copypass",
+        textContent: "COPY",
+      });
+
+      modalContent.style.marginLeft = `${e.target.x}px`;
+      modalContent.style.marginTop = `${e.target.y}px`;
+
+      modalContent.append(editOpt, copyOpt, deleteOpt);
+      modal.append(modalContent);
+      document.querySelector("body").append(modal);
+
+      modal.addEventListener("click", () => {
+        document.querySelector(".modal").remove();
+      });
+
+      copyOpt.addEventListener("click", (e) => {
+        return navigator.clipboard.writeText(objArray[index].password);
+      });
+
+      editOpt.addEventListener("click", (e) => {
+        const currentPassDiv = document.querySelectorAll("#password")[index];
+        const editPassForm = createMyElement("form", { id: "editPass" });
+        const editInput = createMyElement("input", { id: "editValue" });
+        const saveEditedPass = createMyElement("button", {
+          id: "saveEdit",
+          textContent: "SAVE",
+          type: "submit",
+        });
+
+        btnWrap.remove();
+        editInput.value = dataList[index].password;
+        currentPassDiv.textContent = null;
+        editPassForm.append(editInput, saveEditedPass);
+        currentPassDiv.append(editPassForm);
+
+        editPassForm.addEventListener("submit", () => {
+          dataList[index].password = editInput.value;
+          localStorage.setItem("pass", JSON.stringify(dataList));
+          renderContacts(dataList);
+        });
+      });
+
+      deleteOpt.addEventListener('click', () => {
+        dataList.splice(index, 1)
+        localStorage.setItem("pass", JSON.stringify(dataList));
+        renderContacts(dataList);
+      })
+
+    });
+
     btnWrap.append(showPassBtn);
-    lineWrap.append(btnWrap);
+    lineWrap.append(btnWrap, featuresImg);
     contentDiv.append(lineWrap);
   });
 }

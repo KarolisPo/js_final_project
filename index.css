@@ -46,3 +46,34 @@
   flex: 1;
   border: 1px solid red;
 }
+
+.modal {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: auto;
+  left: 0;
+  top: 0;
+  position: fixed;
+}
+
+.modalcontent {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  width: 100px;
+  transform: translateX(-55%);
+}
+
+.modalcontent div {
+  text-align: center;
+}
+
+.modalcontent div:hover {
+  background-color: blanchedalmond;
+  color: black;
+  cursor: pointer;
+  z-index: 10;
+}
