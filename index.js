@@ -8,7 +8,7 @@ const userSpecChar = document.querySelector("#useSpecChar");
 const easySay = document.querySelector("#easySay");
 
 function checkProps() {
-  if (easySay.checked && easySay.value === "easySay") {
+  if (easySay.checked) {
     userNumbers.checked = false;
     userNumbers.setAttribute("disabled", "");
     userSpecChar.checked = false;
